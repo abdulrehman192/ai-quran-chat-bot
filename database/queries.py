@@ -1,6 +1,6 @@
 from typing import List, Dict, Optional, Tuple
 from database.connection import DatabaseManager
-import random
+
 
 class QuranQueries:
     def __init__(self):

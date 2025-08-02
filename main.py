@@ -3,7 +3,6 @@ import logging
 import gradio as gr
 from typing import Dict, Any, List, Tuple
 from agents.orchestrator import QuranChatbotOrchestrator
-from config.settings import Settings
 
 # Configure logging
 logging.basicConfig(
@@ -179,23 +178,9 @@ class QuranChatbotUI:
         """Launch the Gradio interface"""
         interface = self.create_interface()
         
-        # Default launch parameters
-        launch_params = {
-            'server_name': '0.0.0.0',
-            'server_port': 7860,
-            'share': False,
-            'inbrowser': True,
-            'show_error': True,
-            'quiet': False
-        }
-        
-        # Update with user provided parameters
-        launch_params.update(kwargs)
-        
         print("🌙 Starting Quran Chatbot UI...")
-        print(f"📱 Access the interface at: http://localhost:{launch_params['server_port']}")
         
-        interface.launch(**launch_params)
+        interface.launch()
 
 # Updated main.py integration
 class QuranChatbot:
@@ -206,45 +191,7 @@ class QuranChatbot:
         self.logger = logging.getLogger(__name__)
         self.session_history = []
         self.ui = QuranChatbotUI()
-    
-    async def start_chat(self):
-        """Start interactive CLI chat session"""
-        print("🌙 Welcome to Quran Chatbot 🌙")
-        print("Ask me about Quranic verses, duas, Allah's names, or seek spiritual guidance.")
-        print("Supported languages: English, Urdu, Arabic")
-        print("Type 'exit' to quit.\n")
-        
-        while True:
-            try:
-                user_input = input("You: ").strip()
-                
-                if user_input.lower() in ['exit', 'quit', 'bye']:
-                    print("May Allah bless you! Goodbye! 🤲")
-                    break
-                
-                if not user_input:
-                    continue
-                
-                # Process query
-                print("🤔 Thinking...")
-                response = await self.orchestrator.process_query(user_input)
-                
-                # Display response
-                self._display_response(response)
-                
-                # Store in session history
-                self.session_history.append({
-                    "query": user_input,
-                    "response": response
-                })
-                
-            except KeyboardInterrupt:
-                print("\nGoodbye! May Allah bless you! 🤲")
-                break
-            except Exception as e:
-                self.logger.error(f"Chat error: {e}")
-                print("Sorry, something went wrong. Please try again.")
-    
+
     def _display_response(self, response: Dict[str, Any]):
         """Display formatted response to user"""
         print(f"\n🤖 Chatbot ({response.get('worker', 'Unknown')}):")
@@ -278,13 +225,7 @@ async def main():
     import sys
     
     chatbot = QuranChatbot()
-    
-    if len(sys.argv) > 1 and sys.argv[1] == '--ui':
-        # Launch UI mode
-        chatbot.start_ui()
-    else:
-        # Launch CLI mode
-        await chatbot.start_chat()
+    chatbot.start_ui()
 
 if __name__ == "__main__":
     asyncio.run(main())

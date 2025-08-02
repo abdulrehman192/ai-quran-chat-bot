@@ -1,6 +1,5 @@
 from agents.base_worker import BaseWorker
 from typing import Dict, Any
-import random
 
 class LearningWorker(BaseWorker):
     """Worker for educational content about Quran and Islamic teachings"""
