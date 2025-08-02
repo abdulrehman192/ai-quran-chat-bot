@@ -1,0 +1,10 @@
+google-generativeai
+langdetect
+python-dotenv
+deep-translator
+pydantic
+asyncio
+gradio==5.33.1
+logging
+flask 
+flask-cors
